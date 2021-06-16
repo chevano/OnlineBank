@@ -18,8 +18,8 @@
 using namespace std;
 
 int read(vector<Account>&, istream&);
-void write(vector<Account>& accounts, ostream& os);
-void makeDepositORWithdrawal(Transaction& transaction, vector<Account>& accounts, string message);
+void write(vector<Account>&, ostream&);
+void makeDepositORWithdrawal(Transaction&, vector<Account>&, string);
 
 int main() {
   
@@ -48,7 +48,6 @@ int main() {
    while(!quit) {
       string command = prompt();
 
-      trim(command);
       transform(command.begin(), command.end(), command.begin(), ::tolower);
 
       if (command.empty())
