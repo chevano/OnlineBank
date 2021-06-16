@@ -10,6 +10,9 @@
 
 #include <iostream>
 #include <sstream>
+#include <algorithm>
+#include <sstream>
+#include <string>
 
 using namespace std;
 
@@ -33,6 +36,59 @@ void printWelcomeBanner() {
     cout << "\n\n\n\n\n\n\n\n\n\n";
 }
 
+// Converts a string to a long double
+long double strToDouble(string& number) {
+
+   stringstream ss(number);
+   long double d1;
+
+   ss >> d1;
+ 
+   return d1;
+}
+
+// Checks whether a string is a number(double)
+bool isNumeric(string& str) {
+
+   string numbers = "0123456789.";
+   int counter = 0;
+
+   int numberOfDots = count( begin(str), end(str), '.'); 
+
+   if(numberOfDots > 1)
+      return false;
+
+   if(str[0] == '-' || str[0] == '+' || str[0] == '.') {
+      for(int i = 1; i < (int)str.length(); i++) {
+         for(int j = 0; j < (int)numbers.length(); j++) { 
+            if(str[i] == numbers[j]) {
+               counter++;
+            }
+         }
+         if(counter == 0)
+            return false;
+
+         counter = 0;
+      }
+   }
+
+   else {
+      for(int i = 0; i < (int)str.length(); i++) {
+         for(int j = 0; j < (int)numbers.length(); j++) { 
+            if(str[i] == numbers[j]) {
+               counter++;
+            }
+         }
+         if(counter == 0)
+            return false;
+
+         counter = 0;
+      }
+   }
+
+   return true;
+} 
+
 // Gets the prompt from the user
 string prompt() {
    string input;
@@ -50,11 +106,21 @@ Transaction readTransaction(bool withdraw = false) {
    long double amount;
    string memo;
 
+   string amountStr;
+
    cout << setw(15) << std::left << "Account name" << std::right << ": ";
    cin >> account;
 
    cout << setw(15) << std::left << "Amount" << std::right << ": ";
-   cin >> amount;
+   cin >> amountStr;
+
+   if(isNumeric(amountStr) )
+      amount = strToDouble(amountStr);
+   else {
+      cout << "Amount field should be a number " << endl;
+      exit(1);
+   }
+      
 
    amount = (long double) (amount * 100);
    get_money(amount);
